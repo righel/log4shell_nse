@@ -59,18 +59,18 @@ action = function(host, port)
         
         -- build path / query strings
         local path = t["path"] or "/";
-        path = string.gsub(path, "{payload}", id)
+        path = string.gsub(path, "{payload}", payload)
         
         -- build headers
         if t["headers"] ~= nil then
             for _, h in ipairs(t["headers"]) do
-                options["header"][h["name"]] = string.gsub(h["format"], "{payload}", id)
+                options["header"][h["name"]] = string.gsub(h["format"], "{payload}", payload)
             end
         end
         
         -- build body
         if t["body"] ~= nil then
-            options["content"] = string.gsub(t["body"], "{payload}", id)
+            options["content"] = string.gsub(t["body"], "{payload}", payload)
         end
         
         stdnse.debug1("[*] Sending request to %s with tempate id=%s", host.targetname or host.ip, t["id"])
