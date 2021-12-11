@@ -3,13 +3,7 @@
         "id": "1",
         "name": "sample-template",
         "method": "GET",
-        "path": "/{payload}",
-        "query_params": [
-            {
-                "name": "utm_source",
-                "format": "{payload}"
-            }
-        ],
+        "path": "/{payload}?utm_source={payload}",
         "headers": [
             {
                 "name": "User-Agent",
