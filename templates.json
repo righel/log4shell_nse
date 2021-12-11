@@ -1,0 +1,34 @@
+[
+    {
+        "id": "1",
+        "name": "sample-template",
+        "method": "GET",
+        "path": "/{payload}",
+        "query_params": [
+            {
+                "name": "utm_source",
+                "format": "{payload}"
+            }
+        ],
+        "headers": [
+            {
+                "name": "User-Agent",
+                "format": "{payload}"
+            },
+            {
+                "name": "Referer",
+                "format": "{payload}"
+            },
+            {
+                "name": "Cookie",
+                "format": "JSESSIONID={payload}"
+            }
+        ]
+    },
+    {
+        "id": "2",
+        "name": "sample-post-template",
+        "method": "POST",
+        "body": "{payload}"
+    }
+]
