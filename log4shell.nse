@@ -18,7 +18,6 @@ author = "Luciano Righetti"
 license = "GPLv3"
 categories = {"discovery", "exploit"}
 
--- portrule = shortport.http
 portrule = function(host, port)
   return true
 end
