@@ -1,5 +1,3 @@
-# log4shell NSE
-
 ## log4shell.nse
 Injects a Huntress log4shell payload in HTTP requests described by JSON templates.
 Results expire after 30 minutes.
