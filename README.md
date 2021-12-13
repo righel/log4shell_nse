@@ -20,7 +20,7 @@ Nmap done: 1 IP address (1 host up) scanned in 0.13 seconds
 * `id`: Unique id linked with this scan.
 * `mode`: Payload template, one of `huntress`, `canary_tokens` or `custom`.
 * `payload`: Specify a custom payload, should include `%s` where the unique id related to this scan will be replaced.
-* `stealth`: Bypass initial remediation methods by masking `ldap` in the payload. 
+* `stealth`: Bypass initial remediation methods by masking `ldap` in the payload, this may cause the payload to execute multiple times. 
 
 
 **Examples**
