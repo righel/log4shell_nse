@@ -18,11 +18,5 @@
                 "format": "JSESSIONID={payload}"
             }
         ]
-    },
-    {
-        "id": "2",
-        "name": "sample-post-template",
-        "method": "POST",
-        "body": "{payload}"
     }
 ]
