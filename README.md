@@ -4,7 +4,7 @@ Results expire after 30 minutes.
 
 **Sample usage**
 ```
-$ nmap --script log4shell.nse --script-args id=<uuid> mode=huntress -p 80 localhost
+$ nmap --script log4shell.nse --script-args id=<uuid>,mode=huntress -p 80 localhost
 Starting Nmap 7.80 ( https://nmap.org ) at 2021-12-11 12:43 CET
 Nmap scan report for localhost (127.0.0.1)
 Host is up (0.000059s latency).
@@ -31,7 +31,7 @@ $ nmap --script log4shell.nse --script-args=id=<hash>,mode=huntress -p http* 127
 
 * CanaryTokens:
 ```
-$ nmap --script log4shell.nse --script-args=id=<hash>,mode=canary_tokens" -p http* 127.0.0.1
+$ nmap --script log4shell.nse --script-args=id=<hash>,mode=canary_tokens -p http* 127.0.0.1
 ```
 
 * Custom payload:
